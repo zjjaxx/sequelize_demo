@@ -4,5 +4,5 @@ const sequelize = new Sequelize('test', 'root', '123456jia', {
     host: 'localhost',
     dialect: 'mysql'/* 选择 'mysql' | 'mariadb' | 'postgres' | 'mssql' 其一 */
 });
-sequelize.sync({ force: true })
+sequelize.sync({ force: false })
 module.exports=sequelize

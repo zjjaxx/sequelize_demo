@@ -1,0 +1,229 @@
+{
+	"info": {
+		"_postman_id": "e20e17d2-3585-4bd7-bd87-37dc956da82a",
+		"name": "sequelize_demo",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "localhost:9898/test/userInfo?uid=bce485c9-9764-40ba-981f-b086295d839c",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:9898/test/userInfo?uid=bce485c9-9764-40ba-981f-b086295d839c",
+					"host": [
+						"localhost"
+					],
+					"port": "9898",
+					"path": [
+						"test",
+						"userInfo"
+					],
+					"query": [
+						{
+							"key": "uid",
+							"value": "bce485c9-9764-40ba-981f-b086295d839c"
+						}
+					]
+				},
+				"description": "userInfo"
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:9898/test/register",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\":\"zjj\",\r\n    \"phone\":\"17855827436\",\r\n    \"password\":\"123456jia\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:9898/test/register",
+					"host": [
+						"localhost"
+					],
+					"port": "9898",
+					"path": [
+						"test",
+						"register"
+					]
+				},
+				"description": "register"
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:9898/test/addProduct",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"productName\":\"苹果-v3\",\r\n    \"price\":5.76,\r\n    \"img\":\"https://www.apple.com\",\r\n    \"stock\":50\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:9898/test/addProduct",
+					"host": [
+						"localhost"
+					],
+					"port": "9898",
+					"path": [
+						"test",
+						"addProduct"
+					]
+				},
+				"description": "addProduct"
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:9898/test/productDetail?productId=a102e488-206d-4dde-b8b5-5de363ec5c51",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:9898/test/productDetail?productId=a102e488-206d-4dde-b8b5-5de363ec5c51",
+					"host": [
+						"localhost"
+					],
+					"port": "9898",
+					"path": [
+						"test",
+						"productDetail"
+					],
+					"query": [
+						{
+							"key": "productId",
+							"value": "a102e488-206d-4dde-b8b5-5de363ec5c51"
+						}
+					]
+				},
+				"description": "productDetail"
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:9898/test/order",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"uid\":\"f9c7ac73-997c-48ab-b0c7-e7fe60edbf7e\",\r\n    \"orderInfo\":[\r\n        {\r\n            \"productId\":\"73c27a4b-9a5b-4a49-8d29-75fc0ac2cc3b\",\r\n            \"quality\":10\r\n        },\r\n        {\r\n            \"productId\":\"9ac89d40-4a28-4c2a-b725-748d25af300b\",\r\n            \"quality\":10\r\n        }\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:9898/test/order",
+					"host": [
+						"localhost"
+					],
+					"port": "9898",
+					"path": [
+						"test",
+						"order"
+					]
+				},
+				"description": "order"
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:9898/test/addCart",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"uid\":\"f9c7ac73-997c-48ab-b0c7-e7fe60edbf7e\",\r\n    \"productList\":[\r\n        {\r\n            \"productId\":\"73c27a4b-9a5b-4a49-8d29-75fc0ac2cc3b\",\r\n            \"quality\":10\r\n        },\r\n        {\r\n            \"productId\":\"9ac89d40-4a28-4c2a-b725-748d25af300b\",\r\n            \"quality\":10\r\n        },\r\n        {\r\n            \"productId\":\"ec4c6331-3c34-4008-a88d-c4d4df1e64af\",\r\n            \"quality\":10\r\n        }\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:9898/test/addCart",
+					"host": [
+						"localhost"
+					],
+					"port": "9898",
+					"path": [
+						"test",
+						"addCart"
+					]
+				},
+				"description": "order"
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:9898/test/getUserOrder?uid=dba8c6a7-34b2-4473-93ef-9b360ed1fa48",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:9898/test/getUserOrder?uid=dba8c6a7-34b2-4473-93ef-9b360ed1fa48",
+					"host": [
+						"localhost"
+					],
+					"port": "9898",
+					"path": [
+						"test",
+						"getUserOrder"
+					],
+					"query": [
+						{
+							"key": "uid",
+							"value": "dba8c6a7-34b2-4473-93ef-9b360ed1fa48"
+						}
+					]
+				},
+				"description": "getUserOrder"
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:9898/test/cartInfo?uid=f9c7ac73-997c-48ab-b0c7-e7fe60edbf7e",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:9898/test/cartInfo?uid=f9c7ac73-997c-48ab-b0c7-e7fe60edbf7e",
+					"host": [
+						"localhost"
+					],
+					"port": "9898",
+					"path": [
+						"test",
+						"cartInfo"
+					],
+					"query": [
+						{
+							"key": "uid",
+							"value": "f9c7ac73-997c-48ab-b0c7-e7fe60edbf7e"
+						}
+					]
+				},
+				"description": "cartInfo"
+			},
+			"response": []
+		}
+	]
+}
