@@ -13,13 +13,14 @@ const Product = require("./models/Product")
 const Order = require("./models/Order")
 const ProductOrder = require("./models/ProductOrder")
 const CartProduct = require("./models/CartProduct")
+const { Op } = require("sequelize")
 //用户与订单 1:n
 User.hasMany(Order, { foreignKey: "uid" })
 Order.belongsTo(User, { foreignKey: "uid" })
 
 //用户与购物车 1:1
 User.hasOne(Cart, { foreignKey: "uid" })
-Cart.belongsTo(User,{ foreignKey: "uid" })
+Cart.belongsTo(User, { foreignKey: "uid" })
 
 //订单与产品 n:m
 Product.belongsToMany(Order, { through: 'ProductOrder', foreignKey: "productId" })
@@ -46,7 +47,6 @@ router.post("/register", async (ctx, next) => {
 //获取用户信息
 router.get("/userInfo", async (ctx, next) => {
     const { uid } = ctx.request.query
-    console.log("uid", uid)
     let userInfo
     try {
         userInfo = await User.findOne({ where: { uid } })
@@ -85,21 +85,20 @@ router.get("/productDetail", async (ctx, next) => {
 })
 //下单
 router.post("/order", async (ctx, next) => {
-    const { uid, orderInfo } = ctx.request.body
-    let order
-    try {
-        order = await Order.create({ uid })
-        for (let i = 0; i < orderInfo.length; i++) {
-            let product = await Product.findOne({ where: { productId: orderInfo[i].productId } })
-            await order.addProduct(product, { through: { quality: orderInfo[i].quality } })
+    const { uid } = ctx.request.body
+    const user = await User.findOne({ where: { uid }, include: Cart })
+    const cart = user.Cart
+    const products = await cart.getProducts()
+    const order = await user.createOrder()
+    await order.addProducts(products.map(product => {
+        product.ProductOrder = {
+            quality: product.CartProduct.quality
         }
-    } catch (error) {
-        ctx.body = {
-            error
-        }
-    }
+        return product
+    }))
+    await cart.setProducts([])
     ctx.body = {
-        status: "addOk"
+        status: "order ok"
     }
 })
 //获取用户订单
@@ -136,61 +135,48 @@ router.get("/getUserOrder", async (ctx, next) => {
 })
 //添加购物车
 router.post("/addCart", async (ctx, next) => {
-    const { productList, uid } = ctx.request.body
-    try {
-        let cart = await Cart.findOne({ where: { uid } })
-        if (!cart) {
-            cart = await Cart.create({ uid })
-        }
-        for (let i = 0; i < productList.length; i++) {
-            let product = await Product.findOne({ where: { productId: productList[i].productId } })
-            let cartHasProduct=await cart.hasProduct(product)
-            if(cartHasProduct){
-               let products=await cart.getProducts()
-               let product= products.find(item=>item.productId==productList[i].productId)
-               product.CartProduct.quality+=productList[i].quality
-               await product.CartProduct.save()
-            }
-            else{
-                await cart.addProduct(product, { through: { quality: productList[i].quality } })
-            }
-            
-        }
-
-    } catch (error) {
-        ctx.body = {
-            error
-        }
+    const { quality, productId, uid } = ctx.request.body
+    const product = await Product.findOne({ where: { productId } })
+    let cart = await Cart.findOne({ where: { uid } })
+    if (!cart) {
+        cart = await Cart.create({ uid })
+    }
+    let cartHasProduct = await cart.hasProduct(product)
+    if (cartHasProduct) {
+        let _product = await cart.getProducts({ where: { productId } })
+        _product[0].CartProduct.quality += quality
+        await _product[0].CartProduct.save()
+    }
+    else {
+        await cart.addProduct(product, { through: { quality } })
     }
     ctx.body = {
-        status: "addOk"
+        status: "addCartOk"
     }
 })
 //获取用户购物车信息
 router.get("/cartInfo", async (ctx, next) => {
-    const {uid}=ctx.request.query
+    const { uid } = ctx.request.query
     let cartInfo
     try {
-       let cart= await Cart.findOne({where:{uid},include:Product})
-       let productList=cart.Products
-       console.log("productList",productList)
-       productList = productList.map(item => (
-           {
-               proudctName: item.proudctName,
-               price: item.price,
-               stock: item.stock,
-               img: item.img,
-               quality: item.CartProduct.quality,
-               productId: item.productId
-           }
-       ))
-       console.log("productList",productList)
-       cartInfo={
-           cartId:cart.cartId,
-           productList
-       }
+        let cart = await Cart.findOne({ where: { uid }, include: Product })
+        let productList = cart.Products
+        productList = productList.map(item => (
+            {
+                proudctName: item.proudctName,
+                price: item.price,
+                stock: item.stock,
+                img: item.img,
+                quality: item.CartProduct.quality,
+                productId: item.productId
+            }
+        ))
+        cartInfo = {
+            cartId: cart.cartId,
+            productList
+        }
     } catch (error) {
-        
+
     }
     ctx.body = {
         cartInfo
